@@ -1,5 +1,5 @@
 import { Overlay, Modal } from "./Modal.styled";
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from "react-dom";
 import PropTypes from 'prop-types';
 
@@ -7,18 +7,18 @@ const modalRoot = document.querySelector("#modal-root")
 
 export const ImageModal = ({url, onCloseModal}) => {
 
-    const handleKeyDown = useCallback((e) => {
-        if (e.code === "Escape") {
-            onCloseModal()
-        }
-    },[onCloseModal]);
-
     useEffect(() => {
+        const handleKeyDown = (e) => {
+            if (e.code === "Escape") {
+                onCloseModal()
+            }
+        }
+
         window.addEventListener("keydown", handleKeyDown);
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [handleKeyDown]);
+    }, [onCloseModal]);
 
     const handleBackdropClick = (evn) => {
         if(evn.target === evn.currentTarget){

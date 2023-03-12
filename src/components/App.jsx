@@ -21,27 +21,29 @@ export const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [urlLarge, setUrlLarge] = useState('');
 
-  const fetchImages = async (textSearch, page) => {
-    try {
-      setIsLoading(true);
-      const data = await getImages(textSearch, page);
-      setImages(images => [...images, ...data.hits]);
-      setTotalHits(data.totalHits);
-
-      if (data.total === 0) {
-        setError('Sorry, there are no images matching your search query. Please try again.')
-      }
-    } catch (error) {
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  
 
   useEffect(() => {
     if (!textSearch) return;
 
-    fetchImages(textSearch, page);
+    const fetchImages = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getImages(textSearch, page);
+        setImages(images => [...images, ...data.hits]);
+        setTotalHits(data.totalHits);
+
+        if (data.total === 0) {
+          setError('Sorry, there are no images matching your search query. Please try again.')
+        }
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchImages();
   }, [textSearch, page]);
 
 	const handleSubmit = (textSearchValue) => {
